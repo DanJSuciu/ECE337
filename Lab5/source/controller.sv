@@ -158,7 +158,6 @@ begin
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
 		op=3'b010;
 		dest=5;
 		err=0;
