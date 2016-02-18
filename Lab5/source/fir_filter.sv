@@ -20,16 +20,16 @@ module fir_filter
 	output wire err
 );
 
-reg lc;
-reg dr;
-reg cnt_up;
-reg overflow;
-reg clear;
-reg [2:0] op;
-reg [3:0] src1;
-reg [3:0] src2;
-reg [3:0] dest;
-reg [16:0] outreg;
+logic lc;
+logic dr;
+logic cnt_up;
+logic overflow;
+logic clear;
+logic [2:0] op;
+logic [3:0] src1;
+logic [3:0] src2;
+logic [3:0] dest;
+logic [16:0] outreg;
 
 sync SYNCDR
 (
@@ -67,7 +67,7 @@ controller CONTROLLER
 datapath DATAPATH
 (
 	.clk(clk),
-	.n_reset(clk),
+	.n_reset(n_reset),
 	.op(op),
 	.src1(src1),
 	.src2(src2),

@@ -44,21 +44,30 @@ assign modwait = mymodwait;
 
 always_comb
 begin
+	cnt_up=0;
+	clear=0;
+	op=0;
+	src1=0;
+	src2=0;
+	dest=0;
+	err=0;
 	newstate = state;
 	newmodwait = mymodwait;
 	case (state)
 	IDLE:
 	begin 
 		if (lc) begin
+			newmodwait=1;
 			newstate = LOAD1;
 		end else if (dr) begin
+			newmodwait=1;
 			newstate = STORE;
 		end else begin
+			newmodwait=0;
 			newstate = IDLE;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=0;
 		op=3'b000;
 		err=0;
 	end 
@@ -67,7 +76,7 @@ begin
 		newstate = WAIT1;
 		cnt_up=0;
 		clear=1;
-		newmodwait=1;
+		newmodwait=0;
 		op=3'b011;
 		dest=6;
 		err=0;
@@ -77,7 +86,7 @@ begin
 		newstate = LOAD2;
 		cnt_up=0;
 		clear=0;
-		newmodwait=0;
+		newmodwait=1;
 		op=3'b000;
 		err=0;
 	end
@@ -86,7 +95,7 @@ begin
 		newstate = WAIT2;
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
+		newmodwait=0;
 		op=3'b011;
 		dest=7;
 		err=0;
@@ -96,7 +105,7 @@ begin
 		newstate = LOAD3;
 		cnt_up=0;
 		clear=0;
-		newmodwait=0;
+		newmodwait=1;
 		op=3'b000;
 		err=0;
 	end
@@ -105,7 +114,7 @@ begin
 		newstate = WAIT3;
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
+		newmodwait=0;
 		op=3'b011;
 		dest=8;
 		err=0;
@@ -115,7 +124,7 @@ begin
 		newstate = LOAD4;
 		cnt_up=0;
 		clear=0;
-		newmodwait=0;
+		newmodwait=1;
 		op=3'b000;
 		err=0;
 	end
@@ -124,7 +133,7 @@ begin
 		newstate = WAIT4;
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
+		newmodwait=0;
 		op=3'b011;
 		dest=9;
 		err=0;
@@ -141,8 +150,10 @@ begin
 	STORE:
 	begin
 		if (dr) begin
+			newmodwait=1;
 			newstate = ZERO;
 		end else begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end
 		cnt_up=0;
@@ -223,13 +234,14 @@ begin
 	ADD1:
 	begin
 		if (overflow) begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end else begin
+			newmodwait=1;
 			newstate = MUL2;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
 		op=3'b100;
 		dest=0;
 		src1=0;
@@ -251,13 +263,14 @@ begin
 	SUB1:
 	begin
 		if (overflow) begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end else begin
+			newmodwait=1;
 			newstate = MUL3;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
 		op=3'b101;
 		dest=0;
 		src1=0;
@@ -279,13 +292,14 @@ begin
 	ADD2:
 	begin
 		if (overflow) begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end else begin
+			newmodwait=1;
 			newstate = MUL4;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
 		op=3'b100;
 		dest=0;
 		src1=0;
@@ -307,13 +321,14 @@ begin
 	SUB2:
 	begin
 		if (overflow) begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end else begin
+			newmodwait=0;
 			newstate = IDLE;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=1;
 		op=3'b101;
 		dest=0;
 		src1=0;
@@ -323,13 +338,14 @@ begin
 	EIDLE:
 	begin
 		if (dr) begin
+			newmodwait=1;
 			newstate = STORE;
 		end else begin
+			newmodwait=0;
 			newstate = EIDLE;
 		end
 		cnt_up=0;
 		clear=0;
-		newmodwait=0;
 		op=3'b000;
 		err=1;
 	end
